@@ -37,9 +37,7 @@ def demo_animation_pygame():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-
         screen.lock()
         pygame.draw.polygon(screen, color, polygon)
         screen.unlock()
-
         pygame.display.update()

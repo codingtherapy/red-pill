@@ -8,6 +8,8 @@
 
 import time
 import tkinter
+import sys
+import pygame
 
 def move(polygon, x, y):
     return [(p[0]+x, p[1]+y) for p in polygon]
@@ -15,7 +17,7 @@ def move(polygon, x, y):
 def rotate(polygon, x0, y0, alpha):
     return polygon
 
-def demo_animation():
+def demo_animation_tkinter():
     animation = tkinter.Tk()
     canvas = tkinter.Canvas(animation, width=800, height=600)
     canvas.pack()
@@ -24,3 +26,20 @@ def demo_animation():
         canvas.move(1, 5, 0)
         animation.update()
         time.sleep(0.05)
+
+def demo_animation_pygame():
+    screen = pygame.display.set_mode((640,320), 0, 32)
+    polygon = [[10, 10], [10, 10], [60, 50], [35, 35]]
+    color = (255, 255, 0)
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+        screen.lock()
+        pygame.draw.polygon(screen, color, polygon)
+        screen.unlock()
+
+        pygame.display.update()

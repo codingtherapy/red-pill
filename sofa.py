@@ -11,6 +11,13 @@ import tkinter
 import sys
 import pygame
 
+WHITE = (255, 255, 255)
+GREY1 = (220, 220, 220)
+GREY2 = (192, 192, 192)
+GREY3 = (128, 128, 128)
+GREY4 = (30, 30, 30)
+
+
 def move(polygon, x, y):
     return [(p[0]+x, p[1]+y) for p in polygon]
 
@@ -41,3 +48,35 @@ def demo_animation_pygame():
         pygame.draw.polygon(screen, color, polygon)
         screen.unlock()
         pygame.display.update()
+
+def corridor(p):
+    return (p[0]>=0 and p[0] <= 201 and p[1]>=99 and p[1]<=201) or (p[0]>=199 and p[0]<=301 and p[1]>=99 and p[1]<=401)
+
+def in_corridor(polygon):
+    return all([corridor(p) for p in polygon])
+
+def show_sofa():
+    screen = pygame.display.set_mode((400, 400), 0, 32)
+    screen.fill(GREY1)
+
+    corridor = [[0, 100], [300, 100], [300, 400], [200, 400], [200, 200], [0, 200]]
+    sofa = [[120, 100], [220, 120], [260, 140], [280, 190], [270, 260], [240, 290], [230, 220], [220, 180], [150, 180], [90, 180]]
+    pygame.draw.polygon(screen, GREY2, corridor)
+    pygame.draw.polygon(screen, WHITE, sofa)
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+        screen.lock()
+        sofa = move(sofa, 1, 1)
+        screen.fill(GREY1)
+        pygame.draw.polygon(screen, GREY2, corridor)
+        pygame.draw.polygon(screen, WHITE, sofa)
+        screen.unlock()
+        pygame.time.wait(100)
+        pygame.display.update()
+
+if __name__ == '__main__':
+    show_sofa()

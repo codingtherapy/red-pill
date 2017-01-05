@@ -7,7 +7,6 @@
 # Then I succesively modify segments of polygon such that figure is getting bigger and bigger and still can be moved around.
 
 import time
-import tkinter
 import sys
 import random
 import pygame
@@ -26,17 +25,7 @@ def move(polygon, x, y):
 def rotate(polygon, x0, y0, alpha):
     return polygon
 
-def demo_animation_tkinter():
-    animation = tkinter.Tk()
-    canvas = tkinter.Canvas(animation, width=800, height=600)
-    canvas.pack()
-    canvas.create_polygon(10, 10, 10, 10, 60, 50, 35, 35)
-    for x in range(0, 140):
-        canvas.move(1, 5, 0)
-        animation.update()
-        time.sleep(0.05)
-
-def demo_animation_pygame():
+def demo_animation():
     screen = pygame.display.set_mode((640,320), 0, 32)
     polygon = [[10, 10], [10, 10], [60, 50], [35, 35]]
     color = (255, 255, 0)
@@ -82,6 +71,8 @@ def show_sofa():
             screen.unlock()
             pygame.display.update()
         pygame.time.wait(100)
+
+
 
 if __name__ == '__main__':
     show_sofa()

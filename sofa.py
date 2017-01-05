@@ -9,6 +9,7 @@
 import time
 import tkinter
 import sys
+import random
 import pygame
 
 WHITE = (255, 255, 255)
@@ -17,6 +18,7 @@ GREY2 = (192, 192, 192)
 GREY3 = (128, 128, 128)
 GREY4 = (30, 30, 30)
 
+N = [[-1, -1], [-1,0], [-1, 1], [0, -1], [0,1], [1, -1], [1, 0], [1, 1]]
 
 def move(polygon, x, y):
     return [(p[0]+x, p[1]+y) for p in polygon]
@@ -70,13 +72,16 @@ def show_sofa():
                 pygame.quit()
                 sys.exit()
         screen.lock()
-        sofa = move(sofa, 1, 1)
-        screen.fill(GREY1)
-        pygame.draw.polygon(screen, GREY2, corridor)
-        pygame.draw.polygon(screen, WHITE, sofa)
-        screen.unlock()
+        dx, dy = random.choice(N)
+        sofa_ = move(sofa, dx, dy)
+        if in_corridor(sofa_):
+            sofa = sofa_
+            screen.fill(GREY1)
+            pygame.draw.polygon(screen, GREY2, corridor)
+            pygame.draw.polygon(screen, WHITE, sofa)
+            screen.unlock()
+            pygame.display.update()
         pygame.time.wait(100)
-        pygame.display.update()
 
 if __name__ == '__main__':
     show_sofa()

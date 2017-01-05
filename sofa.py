@@ -11,6 +11,8 @@ import sys
 import random
 import pygame
 
+import tsp
+
 WHITE = (255, 255, 255)
 GREY1 = (220, 220, 220)
 GREY2 = (192, 192, 192)
@@ -39,6 +41,76 @@ def demo_animation():
         pygame.draw.polygon(screen, color, polygon)
         screen.unlock()
         pygame.display.update()
+
+def draw_trajectory():
+    '''Generate random trajectory between two points and draw it'''
+    screen = pygame.display.set_mode((300,300), 0, 32)
+    p = [20, 20]
+    q = [280, 280]
+    dots = [[random.randint(20,280), random.randint(20,280)] for _ in range(500)]
+
+    lpoints = []
+    rpoints = []
+    left = p
+    right = q
+    for _ in range(250):
+        dots.sort(key=lambda d: -((d[0]-left[0])**2+(d[1]-left[1])**2))
+        d = dots.pop()
+        lpoints.append(d)
+        left = d
+        dots.sort(key=lambda d: -(abs(d[0]-right[0])+abs(d[1]-right[1])))
+        d = dots.pop()
+        rpoints.insert(0, d)
+        right = d
+    points = [p] + lpoints + rpoints + [q]
+    color = (255, 255, 0)
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+        screen.lock()
+        pygame.draw.lines(screen, color, False, points)
+        screen.unlock()
+        pygame.display.update()
+
+def draw_trajectory_with_tsp():
+    '''Generate random trajectory between two points and draw it'''
+    screen = pygame.display.set_mode((300,300), 0, 32)
+    p = [20, 20]
+    q = [280, 280]
+    dots = [[random.randint(20,280), random.randint(20,280)] for _ in range(500)]
+
+    n, D = tsp.mk_matrix(dots, tsp.distL2) # create the distance matrix
+    tour = tsp.randtour(n)
+    z = tsp.length(tour, D)
+    z = tsp.localsearch(tour, z, D)
+    # tour zawiera indeksy punktow, przez ktore prowadzi trasa
+
+    points = [p] + [dots[i] for i in tour] + [q]
+    color = (255, 255, 0)
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+        screen.lock()
+        pygame.draw.lines(screen, color, False, points)
+        screen.unlock()
+        pygame.display.update()
+
+
+def tsp_demo():
+    coord = [(4,0),(5,6),(8,3),(4,4),(4,1),(4,10),(4,7),(6,8),(8,1)]
+    n, D = tsp.mk_matrix(coord, tsp.distL2) # create the distance matrix
+    instance = "demo"
+    tour = tsp.randtour(n)
+    z = tsp.length(tour, D)
+    print "random:", tour, z, '  -->  ',
+    z = tsp.localsearch(tour, z, D)
+    print tour, z
 
 def corridor(p):
     return (p[0]>=0 and p[0] <= 201 and p[1]>=99 and p[1]<=201) or (p[0]>=199 and p[0]<=301 and p[1]>=99 and p[1]<=401)
@@ -75,4 +147,5 @@ def show_sofa():
 
 
 if __name__ == '__main__':
-    show_sofa()
+    #show_sofa()
+    draw_trajectory_with_tsp()

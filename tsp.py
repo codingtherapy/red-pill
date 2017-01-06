@@ -1,3 +1,5 @@
+## source: http://stackoverflow.com/questions/30552656/python-traveling-salesman-greedy-algorithm
+
 import math
 import random
 

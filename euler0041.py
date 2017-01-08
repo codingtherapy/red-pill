@@ -11,23 +11,17 @@ def is_prime(n):
         return False
     return all(n % i for i in range(3, int(math.sqrt(n)) + 1, 2))
 
-def biggest_pandigital_prime():
-    s = '987654321'
-    for i in range(9):
-        seq = ''.join(s[i:])
+def pandigital_primes_generator():
+    # perm(12), perm(123), perm(12345), perm(123456), perm(123456789)
+    # are divisible by 3
+    for seq in ['87654321', '7654321', '4321']:
         for c in itertools.permutations(seq):
-            p = int(''.join(c))
-            if is_prime(p):
-                return p
-
-def all_pandigital_primes():
-    s = '987654321'
-    for i in range(9):
-        seq = ''.join(s[i:])
-        for c in itertools.permutations(seq):
-            p = int(''.join(c))
-            if is_prime(p):
-                print p
+            if c[-1] not in ['2','4','5','6','8']:
+                p = int(''.join(c))
+                if is_prime(p):
+                    yield p
 
 if __name__=='__main__':
-    print biggest_pandigital_prime()
+    print pandigital_primes_generator().next()
+    for p in pandigital_primes_generator():
+        print p

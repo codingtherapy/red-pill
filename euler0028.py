@@ -52,3 +52,6 @@ def spiral(n):
         return 1 + sum([4 * (2*k-1)**2 - 12 * (k-1) for k in range(2,n/2+1)])
     else:
         return -1
+
+if __name__ == '__main__':
+    print spiral(1001)
